@@ -42,26 +42,23 @@ pipeline {
             }
         } 
         stage('CODE ANALYSIS with SONARQUBE') {
-            environment {
-             scannerHome = tool "${SONARSCANNER}"  // Set the Sonar Scanner tool
+          
+		environment {
+             scannerHome = tool "${SONARSCANNER}"
+          	}
+          steps {
+            withSonarQubeEnv("${SONARSERVER}") {
+               sh '''${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=vprofile \
+                   -Dsonar.projectName=vprofile-repo \
+                   -Dsonar.projectVersion=1.0 \
+                   -Dsonar.sources=src/ \
+                   -Dsonar.java.binaries=target/test-classes/com/visualpathit/account/controllerTest/ \
+                   -Dsonar.junit.reportsPath=target/surefire-reports/ \
+                   -Dsonar.jacoco.reportsPath=target/jacoco.exec \
+                   -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml'''
             }
-            steps {
-                withSonarQubeEnv("${SONARSERVER}") {  // Ensure the environment for SonarQube is set up
-                 sh '''${scannerHome}/bin/sonar-scanner \
-                    -Dsonar.projectKey=vprofile-repo \
-                    -Dsonar.host.url=http://3.85.159.57:9000 \
-                    -Dsonar.login=339473e6c1fb33be0c38fa2196696cafec3b5225
-                    -Dsonar.projectVersion=1.0 \
-                    -Dsonar.sources=src \
-                    -Dsonar.java.binaries=target/test-classes/com/visualpathit/account/controllerTest/ \
-                    -Dsonar.junit.reportsPath=target/surefire-reports \
-                    -Dsonar.jacoco.reportPaths=target/jacoco.exec \
-                    -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml
-                    '''
-            }
-        }
-    }
-
+          }
+   	 }
         stage ('Quality Gate') {
             steps {
                 timeout(time: 1, unit: 'HOURS') {
