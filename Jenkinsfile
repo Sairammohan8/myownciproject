@@ -49,8 +49,9 @@ pipeline {
                 withSonarQubeEnv("${SONARSERVER}") {  // Ensure the environment for SonarQube is set up
                  sh '''
                     ${scannerHome}/bin/sonar-scanner \
-                    -Dsonar.projectKey=vprofile \
-                    -Dsonar.projectName=vprofile-repo \
+                    -Dsonar.projectKey=vprofile-repo \
+                    -Dsonar.host.url=http://3.85.159.57:9000 \
+                    -Dsonar.login=339473e6c1fb33be0c38fa2196696cafec3b5225
                     -Dsonar.projectVersion=1.0 \
                     -Dsonar.sources=src \
                     -Dsonar.java.binaries=target/test-classes/com/visualpathit/account/controllerTest/ \
