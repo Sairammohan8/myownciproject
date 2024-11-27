@@ -47,8 +47,7 @@ pipeline {
             }
             steps {
                 withSonarQubeEnv("${SONARSERVER}") {  // Ensure the environment for SonarQube is set up
-                 sh '''
-                    ${scannerHome}/bin/sonar-scanner \
+                 sh '''${scannerHome}/bin/sonar-scanner \
                     -Dsonar.projectKey=vprofile-repo \
                     -Dsonar.host.url=http://3.85.159.57:9000 \
                     -Dsonar.login=339473e6c1fb33be0c38fa2196696cafec3b5225
